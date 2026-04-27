@@ -9,6 +9,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.common.NeoForge;
 import net.minecraft.resources.ResourceLocation;
 
@@ -36,6 +37,7 @@ public class ClientEventHandler {
                 InputConstants.KEY_F1,
                 KEY_CATEGORY
         );
+        hideProtectionKey.setKeyConflictContext(KeyConflictContext.GUI);
         event.register(hideProtectionKey);
     }
 
