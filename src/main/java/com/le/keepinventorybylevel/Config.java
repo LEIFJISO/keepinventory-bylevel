@@ -22,6 +22,8 @@ public class Config {
             "inventory.24", "inventory.25", "inventory.26"
     );
 
+    public static final ModConfigSpec.ConfigValue<String> XP_LOSS;
+
     static {
         BUILDER.push("KeepInventoryByLevel");
 
@@ -36,6 +38,16 @@ public class Config {
         SLOT_ORDER = BUILDER
                 .comment("The order in which slots are protected. Valid entries: offhand, hotbar.0-8, armor.head/chest/legs/feet, inventory.0-26")
                 .define("slotOrder", DEFAULT_SLOT_ORDER);
+
+        XP_LOSS = BUILDER
+                .comment("""
+                        Experience loss on death. Supported formats:
+                          "50%"   - lose percentage of current levels (e.g. level 10 -> level 5)
+                          "10l"   - lose fixed number of levels (e.g. lose 10 levels)
+                          "100"   - lose fixed amount of experience points
+                          ""      - vanilla behavior (default drop rule)
+                        Default: "50%" (lose half of current levels)""")
+                .define("xpLoss", "50%");
 
         BUILDER.pop();
     }
