@@ -6,8 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.world.entity.player.Inventory;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
@@ -15,7 +13,6 @@ import net.neoforged.neoforge.common.NeoForge;
 
 import java.util.List;
 
-@EventBusSubscriber(modid = KeepInventoryByLevel.MODID, value = Dist.CLIENT)
 public class ClientEventHandler {
 
     public static final String KEY_CATEGORY = "key.categories.keepinventorybylevel";
