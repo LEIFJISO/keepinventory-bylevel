@@ -1,25 +1,21 @@
+本项目为Minecraft Mod，游戏版本1.21.1，加载器为neoforge 21.1.227。
+包名：com.le.keepinventorybylevel
+# 功能
+随等级提升，让背包栏位逐渐死亡不掉落。
+10级（可通过config配置）开始，首先保护副手，随后保护快捷栏(共9格)，然后保护盔甲栏，最后开始保护背包。
+每升一级（可配置需要升几级才增加一次保护的格子数量）多保护一个格子。
+参考https://zh.minecraft.wiki/w/%E6%A7%BD%E4%BD%8D
+顺序同样可通过config调整。默认顺序如上方所述。
+即按照：
+offhand,hotbar.0,hotbar.1,hotbar.2,hotbar.3,hotbar.4,hotbar.5,hotbar.6,hotbar.7,hotbar.8,armor.head,armor.chest,armor.legs,armor.feet,inventory.0,inventory.1,...inventory.26
 
-Installation information
-=======
-
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
-
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
-
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
-
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
-
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+# 表示
+打开物品栏时，被保护的格子在左下角显示一个图标。
+该功能需要绑定快捷键，仅按下时显示，默认绑定为F1。
+在config.json中可以修改快捷键。
+```json
+{
+  "key": "`",
+  "description": "显示保护的格子"
+}
+```
