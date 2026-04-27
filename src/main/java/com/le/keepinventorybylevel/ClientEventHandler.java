@@ -24,7 +24,7 @@ public class ClientEventHandler {
             ResourceLocation.fromNamespaceAndPath(KeepInventoryByLevel.MODID, "textures/gui/protection_icon.png");
 
     public static KeyMapping toggleProtectionKey;
-    private static boolean showProtection = true;
+    private static boolean showProtection = false;
 
     private ClientEventHandler() {}
 
