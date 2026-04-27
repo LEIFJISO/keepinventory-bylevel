@@ -34,7 +34,7 @@ public class ClientEventHandler {
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
         hideProtectionKey = new KeyMapping(
                 KEY_HIDE_PROTECTION,
-                InputConstants.KEY_F1,
+                InputConstants.KEY_GRAVE,
                 KEY_CATEGORY
         );
         hideProtectionKey.setKeyConflictContext(KeyConflictContext.GUI);
