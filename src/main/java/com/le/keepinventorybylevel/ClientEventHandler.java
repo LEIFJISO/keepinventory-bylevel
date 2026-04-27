@@ -43,12 +43,13 @@ public class ClientEventHandler {
         event.register(toggleProtectionKey);
     }
 
-    public static void onScreenKeyPressed(ScreenEvent.KeyPressed.Post event) {
+    public static void onScreenKeyPressed(ScreenEvent.KeyPressed.Pre event) {
         if (toggleProtectionKey == null) {
             return;
         }
-        if (toggleProtectionKey.consumeClick()) {
+        if (toggleProtectionKey.matches(event.getKeyCode(), event.getScanCode())) {
             showProtection = !showProtection;
+            event.setCanceled(true);
         }
     }
 
