@@ -42,11 +42,11 @@ public class Config {
         XP_LOSS = BUILDER
                 .comment("""
                         Experience loss on death. Supported formats:
-                          "50%"   - lose percentage of current levels (e.g. level 10 -> level 5)
+                          "50%"   - lose percentage of total experience points (e.g. 1000XP -> 500XP)
                           "10l"   - lose fixed number of levels (e.g. lose 10 levels)
                           "100"   - lose fixed amount of experience points
                           ""      - vanilla behavior (default drop rule)
-                        Default: "50%" (lose half of current levels)""")
+                        Default: "50%" (lose half of total experience points)""")
                 .define("xpLoss", "50%");
 
         BUILDER.pop();

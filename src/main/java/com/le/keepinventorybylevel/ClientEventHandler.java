@@ -10,15 +10,19 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 
 public class ClientEventHandler {
 
     public static final String KEY_CATEGORY = "key.categories.keepinventorybylevel";
-    public static final String KEY_SHOW_PROTECTION = "key.keepinventorybylevel.show_protection";
+    public static final String KEY_HIDE_PROTECTION = "key.keepinventorybylevel.hide_protection";
 
-    public static KeyMapping showProtectionKey;
+    public static final ResourceLocation PROTECTION_ICON =
+            ResourceLocation.fromNamespaceAndPath(KeepInventoryByLevel.MODID, "textures/gui/protection_icon.png");
+
+    public static KeyMapping hideProtectionKey;
 
     private ClientEventHandler() {}
 
@@ -27,20 +31,20 @@ public class ClientEventHandler {
     }
 
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
-        showProtectionKey = new KeyMapping(
-                KEY_SHOW_PROTECTION,
+        hideProtectionKey = new KeyMapping(
+                KEY_HIDE_PROTECTION,
                 InputConstants.KEY_F1,
                 KEY_CATEGORY
         );
-        event.register(showProtectionKey);
+        event.register(hideProtectionKey);
     }
 
     public static void onScreenRenderPost(ScreenEvent.Render.Post event) {
-        if (showProtectionKey == null) {
+        if (hideProtectionKey == null) {
             return;
         }
 
-        if (!showProtectionKey.isDown()) {
+        if (hideProtectionKey.isDown()) {
             return;
         }
 
@@ -76,15 +80,7 @@ public class ClientEventHandler {
             int slotX = screen.getGuiLeft() + slot.x;
             int slotY = screen.getGuiTop() + slot.y;
 
-            int iconSize = 5;
-            int iconLeft = slotX + 1;
-            int iconTop = slotY + 10;
-
-            graphics.fill(iconLeft, iconTop, iconLeft + iconSize, iconTop + iconSize, 0xCCFFD700);
-            graphics.fill(iconLeft - 1, iconTop - 1, iconLeft + iconSize + 1, iconTop, 0xFF8B6914);
-            graphics.fill(iconLeft - 1, iconTop + iconSize, iconLeft + iconSize + 1, iconTop + iconSize + 1, 0xFF8B6914);
-            graphics.fill(iconLeft - 1, iconTop, iconLeft, iconTop + iconSize, 0xFF8B6914);
-            graphics.fill(iconLeft + iconSize, iconTop, iconLeft + iconSize + 1, iconTop + iconSize, 0xFF8B6914);
+            graphics.blit(PROTECTION_ICON, slotX + 1, slotY + 10, 0, 0, 9, 9, 9, 9);
         }
     }
 }
