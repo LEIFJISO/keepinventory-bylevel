@@ -18,35 +18,42 @@ import java.util.List;
 public class ClientEventHandler {
 
     public static final String KEY_CATEGORY = "key.categories.keepinventorybylevel";
-    public static final String KEY_HIDE_PROTECTION = "key.keepinventorybylevel.hide_protection";
+    public static final String KEY_TOGGLE_PROTECTION = "key.keepinventorybylevel.toggle_protection";
 
     public static final ResourceLocation PROTECTION_ICON =
             ResourceLocation.fromNamespaceAndPath(KeepInventoryByLevel.MODID, "textures/gui/protection_icon.png");
 
-    public static KeyMapping hideProtectionKey;
+    public static KeyMapping toggleProtectionKey;
+    private static boolean showProtection = true;
 
     private ClientEventHandler() {}
 
     public static void onClientSetup(FMLClientSetupEvent event) {
+        NeoForge.EVENT_BUS.addListener(ClientEventHandler::onScreenKeyPressed);
         NeoForge.EVENT_BUS.addListener(ClientEventHandler::onScreenRenderPost);
     }
 
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
-        hideProtectionKey = new KeyMapping(
-                KEY_HIDE_PROTECTION,
+        toggleProtectionKey = new KeyMapping(
+                KEY_TOGGLE_PROTECTION,
                 InputConstants.KEY_GRAVE,
                 KEY_CATEGORY
         );
-        hideProtectionKey.setKeyConflictContext(KeyConflictContext.GUI);
-        event.register(hideProtectionKey);
+        toggleProtectionKey.setKeyConflictContext(KeyConflictContext.GUI);
+        event.register(toggleProtectionKey);
+    }
+
+    public static void onScreenKeyPressed(ScreenEvent.KeyPressed.Post event) {
+        if (toggleProtectionKey == null) {
+            return;
+        }
+        if (toggleProtectionKey.consumeClick()) {
+            showProtection = !showProtection;
+        }
     }
 
     public static void onScreenRenderPost(ScreenEvent.Render.Post event) {
-        if (hideProtectionKey == null) {
-            return;
-        }
-
-        if (hideProtectionKey.isDown()) {
+        if (!showProtection) {
             return;
         }
 

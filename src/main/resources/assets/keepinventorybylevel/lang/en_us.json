@@ -1,4 +1,4 @@
 {
   "key.categories.keepinventorybylevel": "Keep Inventory By Level",
-  "key.keepinventorybylevel.hide_protection": "Hide Protected Slots"
+  "key.keepinventorybylevel.toggle_protection": "Toggle Protected Slots"
 }
