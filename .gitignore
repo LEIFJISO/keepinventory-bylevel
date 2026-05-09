@@ -38,3 +38,9 @@ run/
 **/src/generated/**/.cache/
 repo/
 !**/src/**/repo/
+
+
+### Git Manage ###
+node_modules/
+.husky/_
+*.log
