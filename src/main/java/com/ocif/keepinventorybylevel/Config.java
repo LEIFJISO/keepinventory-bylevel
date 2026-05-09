@@ -1,4 +1,4 @@
-package com.le.keepinventorybylevel;
+package com.ocif.keepinventorybylevel;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 

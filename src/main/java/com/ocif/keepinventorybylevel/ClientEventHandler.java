@@ -1,4 +1,4 @@
-package com.le.keepinventorybylevel;
+package com.ocif.keepinventorybylevel;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
@@ -90,7 +90,7 @@ public class ClientEventHandler {
             int slotX = screen.getGuiLeft() + slot.x;
             int slotY = screen.getGuiTop() + slot.y;
 
-            graphics.blit(PROTECTION_ICON, slotX + 1, slotY + 10, 0, 0, 9, 9, 9, 9);
+            graphics.blit(PROTECTION_ICON, slotX, slotY, 0, 0, 16, 16, 16, 16);
         }
     }
 }

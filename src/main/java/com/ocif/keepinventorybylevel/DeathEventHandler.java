@@ -1,4 +1,4 @@
-package com.le.keepinventorybylevel;
+package com.ocif.keepinventorybylevel;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;

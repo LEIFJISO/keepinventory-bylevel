@@ -1,4 +1,4 @@
-package com.le.keepinventorybylevel;
+package com.ocif.keepinventorybylevel;
 
 import com.mojang.logging.LogUtils;
 import net.neoforged.bus.api.IEventBus;
