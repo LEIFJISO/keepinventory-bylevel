@@ -1,27 +1,32 @@
-# Changelog
+## [unreleased]
 
-### <!-- 2 -->🚜 Refactor
+### 🚜 Refactor
 
-- migrate package name from com.le to com.ocif
+- Migrate package name from com.le to com.ocif
 
-### <!-- 0 -->🚀 Features
+### 📚 Documentation
 
-- implement Keep Inventory By Level mod
-- add configurable experience loss on death
-- invert key behavior, add texture icon, fix config comments, bump v1.0.2
+- Generate CHANGELOG with git-cliff
+## [1.0.6] - 2026-04-27
 
-### <!-- 1 -->🐛 Bug Fixes
+### 🚀 Features
 
-- remove @EventBusSubscriber from ClientEventHandler
-- set KeyConflictContext.GUI so hide key works when inventory is open
-- use consumeClick() for toggle key in GUI per NeoForge docs
-- use ScreenEvent.KeyPressed.Pre instead of Post for toggle key
+- Implement Keep Inventory By Level mod
+- Add configurable experience loss on death
+- Invert key behavior, add texture icon, fix config comments, bump v1.0.2
 
-### <!-- 3 -->📚 Documentation
+### 🐛 Bug Fixes
 
-- rewrite README with full feature documentation
+- Remove @EventBusSubscriber from ClientEventHandler
+- Set KeyConflictContext.GUI so hide key works when inventory is open
+- Use consumeClick() for toggle key in GUI per NeoForge docs
+- Use ScreenEvent.KeyPressed.Pre instead of Post for toggle key
 
-### <!-- 7 -->⚙️ Miscellaneous Tasks
+### 📚 Documentation
 
-- change default key from F1 to GRAVE (), bump v1.0.4
-- default protection overlay to hidden, toggle to show
+- Rewrite README with full feature documentation
+
+### ⚙️ Miscellaneous Tasks
+
+- Change default key from F1 to GRAVE (), bump v1.0.4
+- Default protection overlay to hidden, toggle to show
