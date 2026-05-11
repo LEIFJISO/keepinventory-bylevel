@@ -1,5 +1,8 @@
 package com.ocif.keepinventorybylevel;
 
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -7,17 +10,15 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class DeathEventHandler {
     public static final DeathEventHandler INSTANCE = new DeathEventHandler();
 
-    private final Map<UUID, Map<Integer, ItemStack>> protectedItems = new ConcurrentHashMap<>();
-    private final Map<UUID, PlayerXpSnapshot> xpSnapshots = new ConcurrentHashMap<>();
+    private static final String MOD_TAG = "keepinventorybylevel";
+    private static final String ITEMS_KEY = "protected_items";
+    private static final String XP_LEVEL_KEY = "xp_level";
+    private static final String XP_PROGRESS_KEY = "xp_progress";
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
@@ -26,34 +27,42 @@ public class DeathEventHandler {
         }
 
         String xpLossConfig = Config.XP_LOSS.get().trim();
+        CompoundTag modTag = new CompoundTag();
+
         if (!xpLossConfig.isEmpty()) {
-            xpSnapshots.put(player.getUUID(), new PlayerXpSnapshot(
-                    player.experienceLevel,
-                    player.experienceProgress
-            ));
+            modTag.putInt(XP_LEVEL_KEY, player.experienceLevel);
+            modTag.putFloat(XP_PROGRESS_KEY, player.experienceProgress);
         }
 
         int level = player.experienceLevel;
         List<String> protectedSlotIds = SlotProtectionManager.getProtectedSlotIds(level);
 
-        if (protectedSlotIds.isEmpty()) {
-            return;
-        }
+        if (!protectedSlotIds.isEmpty()) {
+            ListTag itemsList = new ListTag();
+            Inventory inv = player.getInventory();
 
-        Map<Integer, ItemStack> saved = new HashMap<>();
-        Inventory inv = player.getInventory();
+            for (String slotId : protectedSlotIds) {
+                int index = SlotProtectionManager.getUnifiedIndex(slotId);
+                ItemStack stack = SlotProtectionManager.getItem(inv, index).copy();
+                if (!stack.isEmpty()) {
+                    CompoundTag entry = new CompoundTag();
+                    entry.putInt("slot", index);
+                    Tag itemTag = stack.save(player.registryAccess());
+                    if (itemTag != null) {
+                        entry.put("item", itemTag);
+                        itemsList.add(entry);
+                    }
+                    SlotProtectionManager.setItem(inv, index, ItemStack.EMPTY);
+                }
+            }
 
-        for (String slotId : protectedSlotIds) {
-            int index = SlotProtectionManager.getUnifiedIndex(slotId);
-            ItemStack stack = SlotProtectionManager.getItem(inv, index).copy();
-            if (!stack.isEmpty()) {
-                saved.put(index, stack);
-                SlotProtectionManager.setItem(inv, index, ItemStack.EMPTY);
+            if (!itemsList.isEmpty()) {
+                modTag.put(ITEMS_KEY, itemsList);
             }
         }
 
-        if (!saved.isEmpty()) {
-            protectedItems.put(player.getUUID(), saved);
+        if (!modTag.isEmpty()) {
+            player.getPersistentData().put(MOD_TAG, modTag);
         }
     }
 
@@ -63,27 +72,41 @@ public class DeathEventHandler {
             return;
         }
 
-        if (!(event.getEntity() instanceof ServerPlayer newPlayer)) {
+        if (!(event.getEntity() instanceof ServerPlayer newPlayer) || !(event.getOriginal() instanceof ServerPlayer oldPlayer)) {
             return;
         }
 
-        Map<Integer, ItemStack> saved = protectedItems.remove(newPlayer.getUUID());
-        if (saved != null && !saved.isEmpty()) {
+        CompoundTag modTag = oldPlayer.getPersistentData().getCompound(MOD_TAG);
+
+        if (modTag.isEmpty()) {
+            return;
+        }
+
+        if (modTag.contains(ITEMS_KEY, Tag.TAG_LIST)) {
+            ListTag itemsList = modTag.getList(ITEMS_KEY, Tag.TAG_COMPOUND);
             Inventory inv = newPlayer.getInventory();
-            for (Map.Entry<Integer, ItemStack> entry : saved.entrySet()) {
-                int index = entry.getKey();
+            for (int i = 0; i < itemsList.size(); i++) {
+                CompoundTag entry = itemsList.getCompound(i);
+                int index = entry.getInt("slot");
                 ItemStack existing = SlotProtectionManager.getItem(inv, index);
                 if (!existing.isEmpty()) {
                     newPlayer.drop(existing, true, false);
                 }
-                SlotProtectionManager.setItem(inv, index, entry.getValue());
+                Tag itemTag = entry.get("item");
+                if (itemTag != null) {
+                    ItemStack item = ItemStack.parse(newPlayer.registryAccess(), itemTag).orElse(ItemStack.EMPTY);
+                    SlotProtectionManager.setItem(inv, index, item);
+                }
             }
         }
 
-        PlayerXpSnapshot snapshot = xpSnapshots.remove(newPlayer.getUUID());
-        if (snapshot != null) {
-            applyXpLoss(newPlayer, snapshot);
+        if (modTag.contains(XP_LEVEL_KEY, Tag.TAG_INT)) {
+            int oldLevel = modTag.getInt(XP_LEVEL_KEY);
+            float oldProgress = modTag.getFloat(XP_PROGRESS_KEY);
+            applyXpLoss(newPlayer, new PlayerXpSnapshot(oldLevel, oldProgress));
         }
+
+        oldPlayer.getPersistentData().remove(MOD_TAG);
     }
 
     private void applyXpLoss(ServerPlayer player, PlayerXpSnapshot snapshot) {

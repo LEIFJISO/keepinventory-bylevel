@@ -2,6 +2,7 @@ package com.ocif.keepinventorybylevel;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Config {
@@ -11,7 +12,7 @@ public class Config {
     public static final ModConfigSpec.IntValue LEVELS_PER_SLOT;
     public static final ModConfigSpec.ConfigValue<List<String>> SLOT_ORDER;
 
-    public static final List<String> DEFAULT_SLOT_ORDER = List.of(
+    public static final List<String> DEFAULT_SLOT_ORDER = new ArrayList<>(List.of(
             "offhand",
             "hotbar.0", "hotbar.1", "hotbar.2", "hotbar.3", "hotbar.4", "hotbar.5", "hotbar.6", "hotbar.7", "hotbar.8",
             "armor.head", "armor.chest", "armor.legs", "armor.feet",
@@ -20,7 +21,7 @@ public class Config {
             "inventory.12", "inventory.13", "inventory.14", "inventory.15", "inventory.16", "inventory.17",
             "inventory.18", "inventory.19", "inventory.20", "inventory.21", "inventory.22", "inventory.23",
             "inventory.24", "inventory.25", "inventory.26"
-    );
+    ));
 
     public static final ModConfigSpec.ConfigValue<String> XP_LOSS;
 
